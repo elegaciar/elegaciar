@@ -1,0 +1,12 @@
+<div class="vertical-container">
+  <button matFab extended elevated class="link-button"
+    *ngFor="let item of buttonList"
+    mmat-raised-button
+    color="primary"
+    (click)="openLink(item.link)"
+    class="link-button">
+    {{ item.nametag }}
+  </button>
+</div>
+
+

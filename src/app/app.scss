@@ -1,0 +1,13 @@
+.link-button {
+  width: 500px;
+  align: center;
+  cursor: url('../../public/pimmelcursor_hover.png') 0 0, auto;
+}
+
+.vertical-container {
+  display: flex;
+  flex-direction: column;
+  gap: 7px;
+  align-items: center;
+  padding: 10px;
+}

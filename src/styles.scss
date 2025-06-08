@@ -1,0 +1,32 @@
+
+// Custom Theming for Angular Material
+// For more information: https://material.angular.dev/guide/theming
+@use '@angular/material' as mat;
+
+html {
+  @include mat.theme((
+    color: (
+      theme-type: light,
+      primary: mat.$azure-palette,
+      tertiary: mat.$blue-palette,
+    ),
+    typography: Roboto,
+    density: 0,
+  ));
+}
+
+html, body {
+  height: 100%;
+}
+
+body { margin: 0; font-family: Roboto, "Helvetica Neue", sans-serif;
+  cursor: url('../public/pimmelcursor.png') 0 0, auto;
+}
+
+.mat-mdc-fab {
+  cursor: url('../public/pimmelcursor.png') 0 0, auto !important;
+}
+
+//.mat-mdc-fab:hover {
+//  cursor: url('../public/pimmelcursor_hover.png') 0 0, auto !important;
+//}
