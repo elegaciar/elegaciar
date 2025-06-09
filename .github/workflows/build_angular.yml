@@ -32,7 +32,7 @@ jobs:
       run: npm ci
 
     - name: Build Angular application
-      run: npm run build -- --base-href="/elegaciar/"
+      run: npm run build -- --base-href="/elegaciar/" --prerender
 
     - name: Add .nojekyll file
       run: touch dist/elegaciar/browser/.nojekyll
