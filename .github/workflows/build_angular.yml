@@ -1,4 +1,4 @@
-name: Deploy Angular App to GitHub Pages
+name: Deploy Angular App to GitHub Pages with Pre-rendering
 
 on:
   push:
@@ -29,10 +29,15 @@ jobs:
         cache: 'npm'
 
     - name: Install dependencies
-      run: npm ci
+      run: npm ci --legacy-peer-deps
 
     - name: Build Angular application
       run: npm run build -- --base-href="/elegaciar/" --prerender
+
+    - name: Generate static HTML for better crawling
+      run: |
+        cp dist/elegaciar/browser/index.html dist/elegaciar/browser/404.html
+        sed -i 's|<title>.*</title>|<title>Elegaciar - Static Content</title>|' dist/elegaciar/browser/index.html
 
     - name: Add .nojekyll file
       run: touch dist/elegaciar/browser/.nojekyll
