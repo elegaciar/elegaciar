@@ -1,4 +1,4 @@
-name: Deploy Angular App to GitHub Pages with Pre-rendering
+name: Deploy Angular App to GitHub Pages with SSG
 
 on:
   push:
@@ -31,16 +31,69 @@ jobs:
     - name: Install dependencies
       run: npm ci --legacy-peer-deps
 
-    - name: Build Angular application
-      run: npm run build -- --base-href="/elegaciar/" --prerender
+    # Ensure Angular SSR/SSG is properly configured
+    - name: Setup Angular SSG
+      run: |
+        # Add SSG support if not already present
+        if ! grep -q "@angular/ssr" package.json; then
+          ng add @angular/ssr --skip-confirmation
+        fi
 
-    - name: Generate static HTML for better crawling
+    - name: Build Angular application with SSG
+      run: |
+        # Build with static output mode for full SSG
+        npm run build -- \
+          --base-href="/elegaciar/" \
+          --output-mode=static \
+          --prerender
+
+    # Verify that prerendered files exist
+    - name: Verify prerendered files
+      run: |
+        echo "Checking prerendered files..."
+        ls -la dist/elegaciar/browser/
+        # Check if main routes are prerendered
+        if [ -f "dist/elegaciar/browser/index.html" ]; then
+          echo "Index page prerendered"
+        else
+          echo "Index page not found"
+          exit 1
+        fi
+
+    # Copy index.html to 404.html for SPA fallback
+    - name: Setup SPA fallback
       run: |
         cp dist/elegaciar/browser/index.html dist/elegaciar/browser/404.html
-        sed -i 's|<title>.*</title>|<title>Elegaciar - Static Content</title>|' dist/elegaciar/browser/index.html
+
+    # Add meta tags for better SEO and crawler support
+    - name: Enhance HTML for crawlers
+      run: |
+        # Add crawler-friendly meta tags to all HTML files
+        find dist/elegaciar/browser -name "*.html" -exec sed -i '
+          /<head>/a\
+          <meta name="robots" content="index, follow">\
+          <meta name="googlebot" content="index, follow">\
+          <meta name="archive" content="index, follow">
+        ' {} \;
 
     - name: Add .nojekyll file
       run: touch dist/elegaciar/browser/.nojekyll
+
+    # Create sitemap.xml for better crawler discovery
+    - name: Generate sitemap
+      run: |
+        cat > dist/elegaciar/browser/sitemap.xml << EOF
+        <?xml version="1.0" encoding="UTF-8"?>
+        <urlset xmlns="http://www.sitemaps.org/schemas/sitemap/0.9">
+          <url>
+            <loc>https://$(echo $GITHUB_REPOSITORY | cut -d'/' -f1).github.io/elegaciar/</loc>
+            <lastmod>$(date -u +%Y-%m-%dT%H:%M:%SZ)</lastmod>
+            <changefreq>weekly</changefreq>
+            <priority>1.0</priority>
+          </url>
+          <!-- Add more URLs as needed -->
+        </urlset>
+        EOF
 
     - name: Setup GitHub Pages
       uses: actions/configure-pages@v4
