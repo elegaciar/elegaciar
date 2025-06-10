@@ -16,8 +16,8 @@ export class App {
   protected title = 'elegaciar';
 
   private list = new LinkList([
-    new LinkButton("Rule34", "https://rule34.xxx/index.php?page=post&s=list&tags=user:elegaciar"),
-    new LinkButton("LinkTree", "https://linktr.ee/elegaciar/"),
+    new LinkButton("Rule34", "https://rule34.xxx/index.php?page=post&s=list&tags=user:elegaciar", "#ace7a7"),
+    new LinkButton("LinkTree", "https://linktr.ee/elegaciar/", "#7fe168"),
   ]);
 
   get buttonList(): readonly LinkButton[] {

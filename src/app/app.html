@@ -4,9 +4,16 @@
     mmat-raised-button
     color="primary"
     (click)="openLink(item.link)"
-    class="link-button">
+    class="link-button"
+    [ngStyle]="{'background-color': item.color}">
     {{ item.nametag }}
   </button>
 </div>
 
 
+<footer align="center">
+    <div style="padding-top: 500px;"></div>
+    If it's not listed here it doesn't belong to me.
+    <div style="padding-top: 10px;"></div>
+    <img src="assets/FAT.png" alt="Chinese girl" width="1512" height="2016" loading="lazy">
+</footer>

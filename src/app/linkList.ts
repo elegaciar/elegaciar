@@ -7,7 +7,7 @@ export class LinkList {
     return this.linkButtons;
   }
 
-  addLink(nametag: string, link: string) {
-    this.linkButtons.push(new LinkButton(nametag, link));
+  addLink(nametag: string, link: string, color: string) {
+    this.linkButtons.push(new LinkButton(nametag, link, color));
   }
 }
